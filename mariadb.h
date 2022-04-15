@@ -41,19 +41,19 @@
 
 #include <vector>
 
-#include <core/reference.h>
-#include <core/io/stream_peer_tcp.h>
-#include <core/io/ip_address.h>
 #include <core/io/ip.h>
+#include <core/io/ip_address.h>
+#include <core/io/stream_peer_tcp.h>
+#include <core/object/ref_counted.h>
 #include <core/os/thread.h>
-#include <core/ustring.h>
+#include <core/string/ustring.h>
 
 constexpr int kPacketMaxSize = 0xffffff;
 constexpr uint8_t kCharacterCollationId = 33; //utf8_general_ci
 constexpr char *kCharacterCollationName = (char *)"utf8_general_ci";
 
-class MariaDB : public Reference {
-	GDCLASS(MariaDB, Reference);
+class MariaDB : public RefCounted {
+	GDCLASS(MariaDB, RefCounted);
 
 public:
 	enum AuthSrc {

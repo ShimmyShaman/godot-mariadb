@@ -1,7 +1,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <core/ustring.h>
+#include <core/string/ustring.h>
 
 #include <vector>
 #include <cstdint>

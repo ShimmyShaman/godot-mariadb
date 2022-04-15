@@ -49,7 +49,7 @@
 #include <string>
 
 #include <core/os/memory.h>
-#include <core/variant.h>
+#include <core/variant/variant.h>
 #include <mbedtls/sha512.h>
 
 MariaDB::MariaDB() {

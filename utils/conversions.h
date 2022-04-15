@@ -32,9 +32,9 @@
 #ifndef CONVERSIONS_H
 #define CONVERSIONS_H
 
-#include <core/ustring.h>
-#include <core/io/ip_address.h>
 #include <core/io/ip.h>
+#include <core/io/ip_address.h>
+#include <core/string/ustring.h>
 
 #include <cassert>
 #include <cstdint>
