@@ -64,15 +64,15 @@ var last_qry : String = db.get_last_query()
 Returns the String used in the query, this was implemented to troublehsoot characterset issues.
 
 **Get the last query statement converted to uint8_t**  
-var pba : PoolByteArray = db.get_last_query_converted()  
-Returns the vector<uint8_t> as PoolByteArray used in the query just before transmitting to the server, this was implemented to troublehsoot characterset issues.
+var pba : PackedByteArray = db.get_last_query_converted()  
+Returns the vector<uint8_t> as PackedByteArray used in the query just before transmitting to the server, this was implemented to troublehsoot characterset issues.
 
 **Get the stream send to the DB server**  
-var pba : PoolByteArray = db.get_last_transmitted()  
+var pba : PackedByteArray = db.get_last_transmitted()  
 Returns the vector<uint8_t> send to the server, this includes the protocol header.
 
 **Get the stream received from the DB server response**  
-var pba : PoolByteArray = db.get_last_response()  
+var pba : PackedByteArray = db.get_last_response()  
 Returns the vector<uint8_t> recieved from the server.
 
 #### Updates

@@ -168,10 +168,9 @@ private:
 	StreamPeerTCP stream_;
 	String server_version_;
 	String last_query_;
-	PoolByteArray last_query_converted_;
-	PoolByteArray last_transmitted_;
-	PoolByteArray last_response_;
-
+	PackedByteArray last_query_converted_;
+	PackedByteArray last_transmitted_;
+	PackedByteArray last_response_;
 
 	/**
 	 * \brief			Adds the packet size and sequence number to the beginning of the packet,
@@ -181,7 +180,7 @@ private:
 	 */
 	void m_add_packet_header(std::vector<uint8_t> &stream, int sequence);
 	void m_client_protocol_v41(const AuthType srvr_auth_type, const std::vector<uint8_t> srvr_salt);
-	void m_connect(IP_Address ip, int port);
+	void m_connect(IPAddress ip, int port);
 
 	Variant m_get_gd_type_data(int db_field_type, const char *data);
 
@@ -220,8 +219,7 @@ private:
 	void m_server_init_handshake_v10(const std::vector<uint8_t> &src_buffer);
 	void m_update_password(String password);
 	void m_update_username(String username);
-	PoolByteArray m_vector_byte_to_pool_byte(std::vector<uint8_t> vec);
-
+	PackedByteArray m_vector_byte_to_pool_byte(std::vector<uint8_t> vec);
 
 protected:
 	static void _bind_methods();
@@ -230,9 +228,9 @@ public:
 	uint32_t connect_db(String hostname, int port, String dbname, String username = "", String password = "");
 	void disconnect_db();
 	String get_last_query();
-	PoolByteArray get_last_query_converted();
-	PoolByteArray get_last_response();
-	PoolByteArray get_last_transmitted();
+	PackedByteArray get_last_query_converted();
+	PackedByteArray get_last_response();
+	PackedByteArray get_last_transmitted();
 	bool is_connected_db();
 
 	Variant query(String sql_stmt);

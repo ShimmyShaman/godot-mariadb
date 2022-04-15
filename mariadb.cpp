@@ -268,8 +268,7 @@ void MariaDB::m_client_protocol_v41(const AuthType srvr_auth_type, const std::ve
 	}
 }
 
-
-void MariaDB::m_connect(IP_Address ip, int port) {
+void MariaDB::m_connect(IPAddress ip, int port) {
 	error_ = 0;
 	stream_.connect_to_host(ip, port);
 
@@ -301,7 +300,6 @@ void MariaDB::m_connect(IP_Address ip, int port) {
 		error_ = (uint32_t)ERR_SERVER_PROTOCOL_INCOMPATIBLE;
 	}
 } //m_connect
-
 
 Variant MariaDB::m_get_gd_type_data(int db_field_type, const char *data) {
 	switch (db_field_type) {
@@ -561,17 +559,14 @@ void MariaDB::m_update_username(String username) {
 	username_ = gdstring_to_vector<uint8_t>(username);
 }
 
-
-PoolByteArray MariaDB::m_vector_byte_to_pool_byte(std::vector<uint8_t> vec) {
-	PoolByteArray pba;
+PackedByteArray MariaDB::m_vector_byte_to_pool_byte(std::vector<uint8_t> vec) {
+	PackedByteArray pba;
 	for (uint8_t i : vec) {
 		pba.push_back(i);
 	}
 
 	return pba;
-
 }
-
 
 //public
 uint32_t MariaDB::connect_db(String hostname, int port, String dbname, String username, String password) {
@@ -579,7 +574,7 @@ uint32_t MariaDB::connect_db(String hostname, int port, String dbname, String us
 		disconnect_db();
 	}
 
-	IP_Address ip = resolve_host(hostname, (IP::Type)ip_type_);
+	IPAddress ip = resolve_host(hostname, (IP::Type)ip_type_);
 	//std::cout << (ip.is_ipv4() ? "ipv4" : "ipv6") << std::endl;
 
 	if (dbname.length() > 0) {
@@ -631,15 +626,15 @@ String MariaDB::get_last_query() {
 	return last_query_;
 }
 
-PoolByteArray MariaDB::get_last_query_converted() {
+PackedByteArray MariaDB::get_last_query_converted() {
 	return last_query_converted_;
 }
 
-PoolByteArray MariaDB::get_last_response() {
+PackedByteArray MariaDB::get_last_response() {
 	return last_response_;
 }
 
-PoolByteArray MariaDB::get_last_transmitted() {
+PackedByteArray MariaDB::get_last_transmitted() {
 	return last_transmitted_;
 }
 

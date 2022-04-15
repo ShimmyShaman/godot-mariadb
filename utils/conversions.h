@@ -41,7 +41,7 @@
 #include <vector>
 #include <cstdlib>
 
-IP_Address resolve_host(String hostname, IP::Type type);
+IPAddress resolve_host(String hostname, IP::Type type);
 
 template <typename T>
 T bytes_to_num_itr(const uint8_t *src, const size_t byte_count, size_t &start_pos) {

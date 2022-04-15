@@ -1,6 +1,7 @@
 #include "console.h"
 
 #include <core/os/os.h>
+#include <core/os/time.h>
 
 #include <iostream>
 #include <string>
@@ -175,7 +176,7 @@ String get_gdstring_from_console(bool echo_input, uint64_t timeout_ms) {
 	if (console_okay) set_input_echo(echo_input);
 
 	if (timeout_ms > 0) {
-		start_time = OS::get_singleton()->get_system_time_msecs();
+		start_time = Time::get_singleton()->get_ticks_msec();
 	}
 	while (!done) {
 		OS::get_singleton()->delay_usec(10000);
@@ -184,13 +185,13 @@ String get_gdstring_from_console(bool echo_input, uint64_t timeout_ms) {
 			while (chr != '\n' && chr != '\r') {
 				std::cin.get(chr);
 				if (chr != '\n' && chr != '\r') return_str += chr;
-				start_time = OS::get_singleton()->get_system_time_msecs();
+				start_time = Time::get_singleton()->get_ticks_msec();
 			}
 			std::cin.clear();
 			done = true;
 		}
 		if (timeout_ms > 0) {
-			done |= !(OS::get_singleton()->get_system_time_msecs() - start_time < timeout_ms);
+			done |= !(Time::get_singleton()->get_ticks_msec() - start_time < timeout_ms);
 		}
 	}
 
