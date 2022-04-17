@@ -40,7 +40,7 @@ var connect_ok : int = db.connect_db(String hostname, int port, String db_name, 
 Returns int, 0 on success or error code. If AuthSrc::AUTH_SRC_CONSOLE is set then username and password will be ignored and prompted in the console window, you can safely use "" for both parameters in this case.  
 
 **Check connection**  
-var db_connected : bool = db.is_connected_db()
+var db_connected : MultiplayerPeer::ConnectionStatus = db.get_connection_status()
 
 **Send query or command**  
 var qry = db.query(String sql_stmt)  
@@ -86,3 +86,4 @@ to set db.set_dbl2string(true|false), default false, if TYPE_STRING is preferred
 Godot is default float precision, however, insertion is still limited unless done in C++ extension and still limited to Maria DB limitations.  
 
 2021/11/16 1050 PST - Added is_connected_db() to check if still connected to db.  
+2022/04/16 - 4.0 branch Changed is_connected_db() to get_connection_status inline with 4.0 changes

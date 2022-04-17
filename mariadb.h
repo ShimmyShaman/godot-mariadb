@@ -48,6 +48,8 @@
 #include <core/os/thread.h>
 #include <core/string/ustring.h>
 
+#include <modules/enet/enet_multiplayer_peer.h>
+
 constexpr int kPacketMaxSize = 0xffffff;
 constexpr uint8_t kCharacterCollationId = 33; //utf8_general_ci
 constexpr char *kCharacterCollationName = (char *)"utf8_general_ci";
@@ -67,6 +69,7 @@ public:
 		AUTH_TYPE_UNKNOWN,
 		AUTH_TYPE_MYSQL_NATIVE,
 		AUTH_TYPE_ED25519,
+		AUTH_TYPE_CACHING_SHA2,
 		AUTH_TYPE_LAST,
 	};
 
