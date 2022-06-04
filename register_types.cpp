@@ -2,9 +2,16 @@
 #include "core/object/class_db.h"
 #include "mariadb.h"
 
-void register_mariadb_types(){
+void initialize_mariadb_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SERVERS) {
+		return;
+	}
+
 	ClassDB::register_class<MariaDB>();
 }
 
-void unregister_mariadb_types() {
+void uninitialize_mariadb_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SERVERS) {
+		return;
+	}
 }

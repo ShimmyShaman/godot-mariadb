@@ -53,12 +53,19 @@
 #include <core/variant/variant.h>
 #include <mbedtls/sha512.h>
 
+bool is_stream_connected(StreamPeerTCP *p_stream) {
+	if (p_stream->get_status() == StreamPeerTCP::Status::STATUS_CONNECTED) {
+		return true;
+	}
+	return false;
+}
+
 MariaDB::MariaDB() {
 }
 
 MariaDB::~MariaDB() {
 	//close the connection
-	if (stream_.is_connected_to_host()) {
+	if (is_stream_connected(&stream_)) {
 		//let the server know we are discconnecting and disconnect
 		disconnect_db();
 	}
@@ -285,7 +292,7 @@ void MariaDB::m_connect(IPAddress ip, int port) {
 	int myerr = stream_.connect_to_host(ip, port);
 	std::cout << "myerror:" << myerr << std::endl;
 
-	OS::get_singleton()->delay_usec(400000);
+	OS::get_singleton()->delay_usec(1400000);
 
 	std::vector<uint8_t> recv_buffer = m_recv_data(250);
 	std::cout << "recv_buffer.size():" << recv_buffer.size() << std::endl;
@@ -361,7 +368,7 @@ std::vector<uint8_t> MariaDB::m_recv_data(uint32_t timeout) {
 	bool replied = false;
 	uint32_t start_msec = OS::get_singleton()->get_ticks_msec();
 
-	while (!replied && stream_.is_connected_to_host() && OS::get_singleton()->get_ticks_msec() - start_msec < timeout) {
+	while (!replied && is_stream_connected(&stream_) && OS::get_singleton()->get_ticks_msec() - start_msec < timeout) {
 		byte_cnt = stream_.get_available_bytes();
 		if (byte_cnt > 0) {
 			start_msec = OS::get_singleton()->get_ticks_msec();
@@ -577,7 +584,7 @@ PackedByteArray MariaDB::m_vector_byte_to_pool_byte(std::vector<uint8_t> vec) {
 
 //public
 uint32_t MariaDB::connect_db(String hostname, int port, String dbname, String username, String password) {
-	if (stream_.is_connected_to_host()) {
+	if (is_stream_connected(&stream_)) {
 		std::cout << "Was already connected to host. Disconnect->Reconnect." << std::endl;
 		disconnect_db();
 	}
@@ -625,7 +632,7 @@ uint32_t MariaDB::connect_db(String hostname, int port, String dbname, String us
 }
 
 void MariaDB::disconnect_db() {
-	if (stream_.is_connected_to_host()) {
+	if (is_stream_connected(&stream_)) {
 		uint8_t output[5] = { 0x01, 0x00, 0x00, 0x00, 0x01 };
 		stream_.put_data(output, 5); //say goodbye too the server
 		stream_.disconnect_from_host();
@@ -650,11 +657,11 @@ PackedByteArray MariaDB::get_last_transmitted() {
 }
 
 bool MariaDB::is_connected_db() {
-	return stream_.is_connected_to_host();
+	return is_stream_connected(&stream_);
 }
 
 Variant MariaDB::query(String sql_stmt) {
-	bool connected = stream_.is_connected_to_host();
+	bool connected = is_stream_connected(&stream_);
 	if (!connected)
 		return (uint32_t)ERR_NOT_CONNECTED;
 	if (!authenticated_)
