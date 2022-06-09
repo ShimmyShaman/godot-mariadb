@@ -54,6 +54,7 @@
 #include <mbedtls/sha512.h>
 
 bool is_stream_connected(StreamPeerTCP *p_stream) {
+	printf("stream-status:%i\n", p_stream->get_status());
 	if (p_stream->get_status() == StreamPeerTCP::Status::STATUS_CONNECTED) {
 		return true;
 	}
@@ -292,7 +293,16 @@ void MariaDB::m_connect(IPAddress ip, int port) {
 	int myerr = stream_.connect_to_host(ip, port);
 	std::cout << "myerror:" << myerr << std::endl;
 
-	OS::get_singleton()->delay_usec(1400000);
+	const int Delay_usecs = 10000;
+	int connection_timeout = 5000000;
+	while (stream_.get_status() == StreamPeerTCP::Status::STATUS_CONNECTING && connection_timeout > 0) {
+		OS::get_singleton()->delay_usec(Delay_usecs);
+		connection_timeout -= Delay_usecs;
+	}
+	if (stream_.get_status() != StreamPeerTCP::Status::STATUS_CONNECTED) {
+		error_ |= (uint32_t)ERR_NO_RESPONSE;
+		return;
+	}
 
 	std::vector<uint8_t> recv_buffer = m_recv_data(250);
 	std::cout << "recv_buffer.size():" << recv_buffer.size() << std::endl;
@@ -584,7 +594,7 @@ PackedByteArray MariaDB::m_vector_byte_to_pool_byte(std::vector<uint8_t> vec) {
 
 //public
 uint32_t MariaDB::connect_db(String hostname, int port, String dbname, String username, String password) {
-	if (is_stream_connected(&stream_)) {
+	if (stream_.get_status() == StreamPeerTCP::Status::STATUS_CONNECTED || stream_.get_status() == StreamPeerTCP::Status::STATUS_CONNECTING) {
 		std::cout << "Was already connected to host. Disconnect->Reconnect." << std::endl;
 		disconnect_db();
 	}
